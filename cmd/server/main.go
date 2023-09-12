@@ -16,7 +16,7 @@ func main() {
 
 	grpc_pb.RegisterProfileServer(s, srv)
 
-	l, err := net.Listen("tcp", ":8081")
+	l, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		fmt.Println(err)
 	}

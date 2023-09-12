@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const address = "localhost:8081"
+const address = "localhost:50051"
 
 func main() {
 	con, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))

@@ -1,0 +1,31 @@
+syntax = "proto3";
+package service;
+
+option go_package = "pkg/grpc_api";
+
+service Profile {
+  rpc GetUserInfo(UserRequest) returns (UserResponse);
+  rpc GetUserInfoV2(UserRequest) returns (UserResponseV2);
+}
+
+enum UserTypes {
+  teacher = 0;
+  mentor = 1;
+}
+
+message UserRequest {
+  int64 userId = 1;
+}
+
+message UserResponse {
+  int64 id = 1;
+  string name = 2;
+  int32 age = 3;
+  UserTypes userType = 4;
+}
+
+message UserResponseV2 {
+  int64 id = 1;
+  string name = 2;
+  string surName = 3;
+}

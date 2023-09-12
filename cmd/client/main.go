@@ -34,7 +34,7 @@ func main() {
 
 	time.Sleep(time.Second)
 
-	userContents, err := client.GetUserContentById(context.Background(), &grpc_pb.UserId{UserId: 1})
+	userContents, err := client.GetUserContentsById(context.Background(), &grpc_pb.UserId{UserId: 1})
 	if err != nil {
 		log.Fatalf(err.Error())
 	}

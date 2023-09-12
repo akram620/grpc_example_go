@@ -5,7 +5,7 @@ option go_package = "pkg/grpc_pb";
 
 service Profile {
   rpc GetUserInfoById(UserId) returns (UserInfo);
-  rpc GetUserContentById(UserId) returns (Contents);
+  rpc GetUserContentsById(UserId) returns (Contents);
 }
 
 enum ContentTypes {

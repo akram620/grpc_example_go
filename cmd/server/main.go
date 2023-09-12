@@ -42,7 +42,7 @@ func (ProfileGrpcServer) GetUserInfoById(ctx context.Context, req *grpc_pb.UserI
 	}, nil
 }
 
-func (ProfileGrpcServer) GetUserContentById(ctx context.Context, req *grpc_pb.UserId) (*grpc_pb.Contents, error) {
+func (ProfileGrpcServer) GetUserContentsById(ctx context.Context, req *grpc_pb.UserId) (*grpc_pb.Contents, error) {
 	fmt.Println("user id: ", req.UserId)
 
 	rand.Seed(time.Now().UnixNano())

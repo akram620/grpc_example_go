@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Profile_GetUserInfoById_FullMethodName    = "/service.Profile/GetUserInfoById"
-	Profile_GetUserContentById_FullMethodName = "/service.Profile/GetUserContentById"
+	Profile_GetUserInfoById_FullMethodName     = "/service.Profile/GetUserInfoById"
+	Profile_GetUserContentsById_FullMethodName = "/service.Profile/GetUserContentsById"
 )
 
 // ProfileClient is the client API for Profile service.
@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProfileClient interface {
 	GetUserInfoById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*UserInfo, error)
-	GetUserContentById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Contents, error)
+	GetUserContentsById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Contents, error)
 }
 
 type profileClient struct {
@@ -48,9 +48,9 @@ func (c *profileClient) GetUserInfoById(ctx context.Context, in *UserId, opts ..
 	return out, nil
 }
 
-func (c *profileClient) GetUserContentById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Contents, error) {
+func (c *profileClient) GetUserContentsById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Contents, error) {
 	out := new(Contents)
-	err := c.cc.Invoke(ctx, Profile_GetUserContentById_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Profile_GetUserContentsById_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c *profileClient) GetUserContentById(ctx context.Context, in *UserId, opts
 // for forward compatibility
 type ProfileServer interface {
 	GetUserInfoById(context.Context, *UserId) (*UserInfo, error)
-	GetUserContentById(context.Context, *UserId) (*Contents, error)
+	GetUserContentsById(context.Context, *UserId) (*Contents, error)
 	mustEmbedUnimplementedProfileServer()
 }
 
@@ -73,8 +73,8 @@ type UnimplementedProfileServer struct {
 func (UnimplementedProfileServer) GetUserInfoById(context.Context, *UserId) (*UserInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfoById not implemented")
 }
-func (UnimplementedProfileServer) GetUserContentById(context.Context, *UserId) (*Contents, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserContentById not implemented")
+func (UnimplementedProfileServer) GetUserContentsById(context.Context, *UserId) (*Contents, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserContentsById not implemented")
 }
 func (UnimplementedProfileServer) mustEmbedUnimplementedProfileServer() {}
 
@@ -107,20 +107,20 @@ func _Profile_GetUserInfoById_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Profile_GetUserContentById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Profile_GetUserContentsById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserId)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProfileServer).GetUserContentById(ctx, in)
+		return srv.(ProfileServer).GetUserContentsById(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Profile_GetUserContentById_FullMethodName,
+		FullMethod: Profile_GetUserContentsById_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServer).GetUserContentById(ctx, req.(*UserId))
+		return srv.(ProfileServer).GetUserContentsById(ctx, req.(*UserId))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -137,8 +137,8 @@ var Profile_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Profile_GetUserInfoById_Handler,
 		},
 		{
-			MethodName: "GetUserContentById",
-			Handler:    _Profile_GetUserContentById_Handler,
+			MethodName: "GetUserContentsById",
+			Handler:    _Profile_GetUserContentsById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/akram620/grpc_example_go/pkg/grpc_api"
+	"github.com/akram620/grpc_example_go/pkg/grpc_pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
@@ -19,10 +19,10 @@ func main() {
 	}
 	defer con.Close()
 
-	client := grpc_api.NewProfileClient(con)
+	client := grpc_pb.NewProfileClient(con)
 
 	for i := 1; i <= 10; i++ {
-		response, err := client.GetUserInfo(context.Background(), &grpc_api.UserRequest{UserId: int64(i)})
+		response, err := client.GetUserInfo(context.Background(), &grpc_pb.UserRequest{UserId: int64(i)})
 		if err != nil {
 			log.Fatalf(err.Error())
 		}

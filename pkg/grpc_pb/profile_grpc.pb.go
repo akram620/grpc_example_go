@@ -4,7 +4,7 @@
 // - protoc             v3.12.4
 // source: pkg/grpc_proto/profile.proto
 
-package grpc_api
+package grpc_pb
 
 import (
 	context "context"
@@ -19,8 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Profile_GetUserInfo_FullMethodName   = "/service.Profile/GetUserInfo"
-	Profile_GetUserInfoV2_FullMethodName = "/service.Profile/GetUserInfoV2"
+	Profile_GetUserInfo_FullMethodName = "/service.Profile/GetUserInfo"
 )
 
 // ProfileClient is the client API for Profile service.
@@ -28,7 +27,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProfileClient interface {
 	GetUserInfo(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
-	GetUserInfoV2(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponseV2, error)
 }
 
 type profileClient struct {
@@ -48,21 +46,11 @@ func (c *profileClient) GetUserInfo(ctx context.Context, in *UserRequest, opts .
 	return out, nil
 }
 
-func (c *profileClient) GetUserInfoV2(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponseV2, error) {
-	out := new(UserResponseV2)
-	err := c.cc.Invoke(ctx, Profile_GetUserInfoV2_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ProfileServer is the server API for Profile service.
 // All implementations must embed UnimplementedProfileServer
 // for forward compatibility
 type ProfileServer interface {
 	GetUserInfo(context.Context, *UserRequest) (*UserResponse, error)
-	GetUserInfoV2(context.Context, *UserRequest) (*UserResponseV2, error)
 	mustEmbedUnimplementedProfileServer()
 }
 
@@ -72,9 +60,6 @@ type UnimplementedProfileServer struct {
 
 func (UnimplementedProfileServer) GetUserInfo(context.Context, *UserRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
-}
-func (UnimplementedProfileServer) GetUserInfoV2(context.Context, *UserRequest) (*UserResponseV2, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfoV2 not implemented")
 }
 func (UnimplementedProfileServer) mustEmbedUnimplementedProfileServer() {}
 
@@ -107,24 +92,6 @@ func _Profile_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Profile_GetUserInfoV2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProfileServer).GetUserInfoV2(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Profile_GetUserInfoV2_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServer).GetUserInfoV2(ctx, req.(*UserRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Profile_ServiceDesc is the grpc.ServiceDesc for Profile service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -135,10 +102,6 @@ var Profile_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserInfo",
 			Handler:    _Profile_GetUserInfo_Handler,
-		},
-		{
-			MethodName: "GetUserInfoV2",
-			Handler:    _Profile_GetUserInfoV2_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

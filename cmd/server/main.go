@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/akram620/grpc_example_go/pkg/grpc_api"
+	"github.com/akram620/grpc_example_go/pkg/grpc_pb"
 	"google.golang.org/grpc"
 	"math/rand"
 	"net"
@@ -14,7 +14,7 @@ func main() {
 	s := grpc.NewServer()
 	srv := &ProfileGrpcServer{}
 
-	grpc_api.RegisterProfileServer(s, srv)
+	grpc_pb.RegisterProfileServer(s, srv)
 
 	l, err := net.Listen("tcp", ":8081")
 	if err != nil {
@@ -27,24 +27,24 @@ func main() {
 }
 
 type ProfileGrpcServer struct {
-	grpc_api.UnimplementedProfileServer
+	grpc_pb.UnimplementedProfileServer
 }
 
-func (ProfileGrpcServer) GetUserInfo(ctx context.Context, req *grpc_api.UserRequest) (*grpc_api.UserResponse, error) {
+func (ProfileGrpcServer) GetUserInfo(ctx context.Context, req *grpc_pb.UserRequest) (*grpc_pb.UserResponse, error) {
 	fmt.Println("Request user id: ", req.UserId)
 
 	rand.Seed(time.Now().UnixNano())
 
-	return &grpc_api.UserResponse{
+	return &grpc_pb.UserResponse{
 		Id:       req.GetUserId(),
 		Name:     "Name",
 		Age:      int32(rand.Intn(21) + 10),
-		UserType: grpc_api.UserTypes_teacher,
+		UserType: grpc_pb.UserTypes_teacher,
 	}, nil
 }
 
-func (ProfileGrpcServer) GetUserInfoV2(ctx context.Context, req *grpc_api.UserRequest) (*grpc_api.UserResponseV2, error) {
-	return &grpc_api.UserResponseV2{
+func (ProfileGrpcServer) GetUserInfoV2(ctx context.Context, req *grpc_pb.UserRequest) (*grpc_pb.UserResponseV2, error) {
+	return &grpc_pb.UserResponseV2{
 		Id:      req.GetUserId(),
 		Name:    "Name",
 		SurName: "A",

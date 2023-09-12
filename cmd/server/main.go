@@ -42,11 +42,3 @@ func (ProfileGrpcServer) GetUserInfo(ctx context.Context, req *grpc_pb.UserReque
 		UserType: grpc_pb.UserTypes_teacher,
 	}, nil
 }
-
-func (ProfileGrpcServer) GetUserInfoV2(ctx context.Context, req *grpc_pb.UserRequest) (*grpc_pb.UserResponseV2, error) {
-	return &grpc_pb.UserResponseV2{
-		Id:      req.GetUserId(),
-		Name:    "Name",
-		SurName: "A",
-	}, nil
-}

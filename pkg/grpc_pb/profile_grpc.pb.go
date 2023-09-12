@@ -19,14 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Profile_GetUserInfo_FullMethodName = "/service.Profile/GetUserInfo"
+	Profile_GetUserInfoById_FullMethodName    = "/service.Profile/GetUserInfoById"
+	Profile_GetUserContentById_FullMethodName = "/service.Profile/GetUserContentById"
 )
 
 // ProfileClient is the client API for Profile service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProfileClient interface {
-	GetUserInfo(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	GetUserInfoById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*UserInfo, error)
+	GetUserContentById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Contents, error)
 }
 
 type profileClient struct {
@@ -37,9 +39,18 @@ func NewProfileClient(cc grpc.ClientConnInterface) ProfileClient {
 	return &profileClient{cc}
 }
 
-func (c *profileClient) GetUserInfo(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
-	out := new(UserResponse)
-	err := c.cc.Invoke(ctx, Profile_GetUserInfo_FullMethodName, in, out, opts...)
+func (c *profileClient) GetUserInfoById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*UserInfo, error) {
+	out := new(UserInfo)
+	err := c.cc.Invoke(ctx, Profile_GetUserInfoById_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *profileClient) GetUserContentById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Contents, error) {
+	out := new(Contents)
+	err := c.cc.Invoke(ctx, Profile_GetUserContentById_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +61,8 @@ func (c *profileClient) GetUserInfo(ctx context.Context, in *UserRequest, opts .
 // All implementations must embed UnimplementedProfileServer
 // for forward compatibility
 type ProfileServer interface {
-	GetUserInfo(context.Context, *UserRequest) (*UserResponse, error)
+	GetUserInfoById(context.Context, *UserId) (*UserInfo, error)
+	GetUserContentById(context.Context, *UserId) (*Contents, error)
 	mustEmbedUnimplementedProfileServer()
 }
 
@@ -58,8 +70,11 @@ type ProfileServer interface {
 type UnimplementedProfileServer struct {
 }
 
-func (UnimplementedProfileServer) GetUserInfo(context.Context, *UserRequest) (*UserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
+func (UnimplementedProfileServer) GetUserInfoById(context.Context, *UserId) (*UserInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfoById not implemented")
+}
+func (UnimplementedProfileServer) GetUserContentById(context.Context, *UserId) (*Contents, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserContentById not implemented")
 }
 func (UnimplementedProfileServer) mustEmbedUnimplementedProfileServer() {}
 
@@ -74,20 +89,38 @@ func RegisterProfileServer(s grpc.ServiceRegistrar, srv ProfileServer) {
 	s.RegisterService(&Profile_ServiceDesc, srv)
 }
 
-func _Profile_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserRequest)
+func _Profile_GetUserInfoById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserId)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProfileServer).GetUserInfo(ctx, in)
+		return srv.(ProfileServer).GetUserInfoById(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Profile_GetUserInfo_FullMethodName,
+		FullMethod: Profile_GetUserInfoById_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServer).GetUserInfo(ctx, req.(*UserRequest))
+		return srv.(ProfileServer).GetUserInfoById(ctx, req.(*UserId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Profile_GetUserContentById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProfileServer).GetUserContentById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Profile_GetUserContentById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProfileServer).GetUserContentById(ctx, req.(*UserId))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,8 +133,12 @@ var Profile_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ProfileServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetUserInfo",
-			Handler:    _Profile_GetUserInfo_Handler,
+			MethodName: "GetUserInfoById",
+			Handler:    _Profile_GetUserInfoById_Handler,
+		},
+		{
+			MethodName: "GetUserContentById",
+			Handler:    _Profile_GetUserContentById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

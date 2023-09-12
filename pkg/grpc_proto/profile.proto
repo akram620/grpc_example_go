@@ -4,21 +4,32 @@ package service;
 option go_package = "pkg/grpc_pb";
 
 service Profile {
-  rpc GetUserInfo(UserRequest) returns (UserResponse);
+  rpc GetUserInfoById(UserId) returns (UserInfo);
+  rpc GetUserContentById(UserId) returns (Contents);
 }
 
-enum UserTypes {
-  teacher = 0;
-  mentor = 1;
+enum ContentTypes {
+  image = 0;
+  video = 1;
 }
 
-message UserRequest {
+message UserId {
   int64 userId = 1;
 }
 
-message UserResponse {
+message UserInfo {
   int64 id = 1;
   string name = 2;
   int32 age = 3;
-  UserTypes userType = 4;
+}
+
+message Content {
+  int64 id = 1;
+  ContentTypes contentType = 2;
+  string url = 3;
+}
+
+message Contents {
+  int64 userId = 1;
+  repeated Content contents = 2;
 }

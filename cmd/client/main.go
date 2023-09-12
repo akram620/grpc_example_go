@@ -22,13 +22,22 @@ func main() {
 	client := grpc_pb.NewProfileClient(con)
 
 	for i := 1; i <= 10; i++ {
-		response, err := client.GetUserInfo(context.Background(), &grpc_pb.UserRequest{UserId: int64(i)})
-		if err != nil {
-			log.Fatalf(err.Error())
-		}
 
-		fmt.Printf("%+v\n", response)
-		time.Sleep(time.Second)
 	}
+
+	userInfo, err := client.GetUserInfoById(context.Background(), &grpc_pb.UserId{UserId: 1})
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	fmt.Printf("%+v\n", userInfo)
+
+	time.Sleep(time.Second)
+
+	userContents, err := client.GetUserContentById(context.Background(), &grpc_pb.UserId{UserId: 1})
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	fmt.Printf("%+v\n", userContents)
 
 }

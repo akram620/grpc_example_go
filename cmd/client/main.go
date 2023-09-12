@@ -21,10 +21,6 @@ func main() {
 
 	client := grpc_pb.NewProfileClient(con)
 
-	for i := 1; i <= 10; i++ {
-
-	}
-
 	userInfo, err := client.GetUserInfoById(context.Background(), &grpc_pb.UserId{UserId: 1})
 	if err != nil {
 		log.Fatalf(err.Error())
